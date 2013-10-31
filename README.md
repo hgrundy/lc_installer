@@ -1,4 +1,4 @@
 lc_installer
 ============
 
-wix-based Windows installer. Ouch.
+Windows installer using Inno Setup.
