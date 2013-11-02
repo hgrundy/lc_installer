@@ -10,10 +10,7 @@
 #define MyAppIcon "web-trifecta-badge.ico"
 
 #define NSSM "nssm64.exe"
-#define NSSM32 "nssm32.exe"
-#define NSSM64 "nssm64.exe"
-#define NODE32 "node-v0.10.21-x86.msi"
-#define NODE64 "node-v0.10.21-x64.msi"
+#define JAVA "jre-7u45-windows-x64.exe"
 #define NODE "node-v0.10.21-x64.msi"
 #define USERPROFILE "C:\Users\r-b-h"
 
@@ -41,27 +38,40 @@ Password=kitty
 Compression=lzma
 SolidCompression=yes
 
+
+[Types]
+Name: "full";   Description: "Full: Browser App and all LogicalCat Crawlers"
+Name: "demo";   Description: "Demo: Browser App and Business Documents"
+Name: "custom"; Description: "Custom: Select Individual Crawlers";                  Flags: iscustom
+
+
+[Components]
+Name: "base";   Description: "Browser Application";        Types: full demo custom; Flags: fixed
+Name: "dox";    Description: "Common Business Documents";  Types: full demo       
+Name: "epf";    Description: "Common E&P Files:";          Types: full        
+Name: "pet";    Description: "IHS Petra Projects";         Types: full
+Name: "tks";    Description: "IHS Kingdom Suite Projects"; Types: full
+Name: "ggx";    Description: "LMKR GeoGraphix Discovery";  Types: full          
+
+
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+
 [Files]
-Source: "C:\dev\lc_installer\lib\node-v0.10.21-x86.msi"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\node-v0.10.21-x64.msi"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\node-v0.10.21-x64.msi";    DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\jre-7u45-windows-x64.exe"; DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\rm_java.bat";              DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\msie-app.hta";             DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\msie-app-secure.hta";      DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\winstart-browser.bat";     DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\winstart-server.bat";      DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\nssm64.exe";               DestDir: "{app}";               Flags: ignoreversion
 
-Source: "C:\dev\lc_installer\lib\msie-app.hta"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\msie-app-secure.hta"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\web-trifecta-badge.ico";   DestDir: "{app}";               Flags: ignoreversion
+Source: "C:\dev\HelloNode\*";                               DestDir: "{app}";               Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\dev\lc_installer\lib\elasticsearch-0.90.x\*";   DestDir: "{app}\elasticsearch"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-Source: "C:\dev\lc_installer\lib\winstart-browser.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\winstart-server.bat"; DestDir: "{app}"; Flags: ignoreversion
-
-Source: "C:\dev\lc_installer\lib\nssm32.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\nssm64.exe"; DestDir: "{app}"; Flags: ignoreversion
-
-Source: "C:\dev\lc_installer\lib\web-trifecta-badge.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\dev\HelloNode\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-
-Source: "C:\dev\lc_installer\lib\elasticsearch-0.90.5\*"; DestDir: "{app}\elasticsearch"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppIcon}"
@@ -71,41 +81,77 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFi
 ; postinstall launch
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent runhidden
 
-; These all run with 'runascurrentuser' (i.e. admin) whereas 'runasoriginaluser' would refer to the logged in user
 ; Install Node
 Filename: "{sys}\msiexec.exe"; Parameters: "/qb INSTALLDIR=c:\logicalcat\nodejs /i ""{app}\{#NODE}""";
 
-; Add Firewall Rules
-;Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node In"" program=""{pf64}\nodejs\node.exe"" dir=in action=allow enable=yes"; Flags: runhidden;
-;Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node Out"" program=""{pf64}\nodejs\node.exe"" dir=out action=allow enable=yes"; Flags: runhidden;
-Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node In"" program=""{app}\nodejs\node.exe"" dir=in action=allow enable=yes"; Flags: runhidden;
-Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node Out"" program=""{app}\nodejs\node.exe"" dir=out action=allow enable=yes"; Flags: runhidden;
+; Install Java (just keep default location)
+;Filename: "{app}\{#JAVA}";     Parameters: "INSTALLDIR=c:\logicalcat\java /s ";
+Filename: "{app}\{#JAVA}";     Parameters: " /s ";
 
+; Add Firewall Rules
+Filename: "{sys}\netsh.exe";   Parameters: "advfirewall firewall add rule name=""Node In"" program=""{app}\nodejs\node.exe"" dir=in action=allow enable=yes"; Flags: runhidden;
+Filename: "{sys}\netsh.exe";   Parameters: "advfirewall firewall add rule name=""Node Out"" program=""{app}\nodejs\node.exe"" dir=out action=allow enable=yes"; Flags: runhidden;
 
 ; Add System Service
-;Filename: "{app}\{#NSSM}"; Parameters: "install {#MyAppName} ""{pf64}\nodejs\node.exe"" ""{app}\bin\server.js"" ""5566"""; Flags: runhidden;
-Filename: "{app}\{#NSSM}"; Parameters: "install {#MyAppName} ""{app}\nodejs\node.exe"" ""{app}\bin\server.js"" ""5566"""; Flags: runhidden;
-Filename: "{sys}\net.exe"; Parameters: "start {#MyAppName}"; Flags: runhidden;
-;Filename: "{pf64}\nodejs\node.exe"; Parameters: "{app}\bin\windows-service-installer.js install"; Flags: runhidden;
-;Filename: "{sys}\net.exe"; Parameters: "start {#MyAppLCShortName}"; Flags: runhidden;
+Filename: "{app}\{#NSSM}";     Parameters: "install {#MyAppName} ""{app}\nodejs\node.exe"" ""{app}\bin\server.js"" ""5566"""; Flags: runhidden;
+Filename: "{sys}\net.exe";     Parameters: "start {#MyAppName}"; Flags: runhidden;
 
+
+
+
+
+
+[Registry]
+; set JAVA_HOME
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueName: "JAVA_HOME"; ValueType: String; ValueData: "{pf64}\java\jre7";
+
+; set app stuff
+Root: HKLM; Subkey: "Software\{#MyAppPublisher}"; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\{#MyAppPublisher}\{#MyAppName}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "Software\{#MyAppPublisher}\{#MyAppName}\Settings"; ValueType: string; ValueName: "Path"; ValueData: "{app}"
+Root: HKLM; Subkey: "Software\{#MyAppPublisher}\{#MyAppName}\Settings"; ValueType: string; ValueName: "Version"; ValueData: "{#MyAppVersion}"
+
+[Setup]
+; Tell Windows Explorer to reload the environment
+ChangesEnvironment=yes
+
+; config ElasticSearch service
+[Run]
+Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "install"; Flags: waituntilidle
+Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "start";   Flags: waituntilidle
+
+
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [UninstallRun]
-; Removes System Service
+; Remove System Service
 Filename: "{sys}\net.exe"; Parameters: "stop {#MyAppName}"; Flags: runhidden;
 Filename: "{app}\{#NSSM}"; Parameters: "remove {#MyAppName} confirm"; Flags: runhidden;
 Filename: "{sys}\net.exe"; Parameters: "stop {#MyAppName}"; Flags: runhidden;
-;Filename: "{pf64}\nodejs\node.exe"; Parameters: "{app}\bin\windows-service-installer.js remove"; Flags: runhidden;
 Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\bin\windows-service-installer.js remove"; Flags: runhidden;
 
+
 ; Remove Firewall Rules
-;Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Node In"" program=""{pf64}\nodejs\node.exe"""; Flags: runhidden;
-;Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Node Out"" program=""{pf64}\nodejs\node.exe"""; Flags: runhidden;
-Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Node In"" program=""{app}\nodejs\node.exe"""; Flags: runhidden;
+Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Node In"" program=""{app}\nodejs\node.exe""";  Flags: runhidden;
 Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Node Out"" program=""{app}\nodejs\node.exe"""; Flags: runhidden;
+
+
+; Stop and Uninstall ElasticSearch Service
+Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "stop";   Flags: waituntilidle
+Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "remove"; Flags: waituntilidle
 
 ; Uninstall Node
 Filename: "{sys}\msiexec.exe"; Parameters: "/passive /x ""{app}\{#NODE}""";
+
+
+; Uninstall Java (could not use msiexec x{program id} ~ weird bracket escape in this horrible editor?)
+; ...don't uninstall
+;Filename: "{app}\rm_java.bat"; Flags: runhidden;
 
 ; Remove all leftovers
 Filename: "{sys}\rmdir"; Parameters: "-r ""{app}""";
