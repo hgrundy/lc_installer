@@ -61,12 +61,12 @@ Name: "custom"; Description: "Custom: Select Individual Crawlers";              
 
 
 [Components]
-Name: "base";   Description: "Browser Application";        Types: full demo custom; Flags: fixed
-Name: "dox";    Description: "Common Business Documents";  Types: full demo       
-Name: "epf";    Description: "Common E&P Files:";          Types: full        
-Name: "pet";    Description: "IHS Petra Projects";         Types: full
-Name: "tks";    Description: "IHS Kingdom Suite Projects"; Types: full
-Name: "ggx";    Description: "LMKR GeoGraphix Discovery";  Types: full          
+Name: "base";   Description: "LogicalCat Browser Application: The main interface for search and reporting. "; Types: full demo custom; Flags: fixed
+Name: "dox";    Description: "Common Business Documents: MS Office, Adobe PDF, txt/csv, iWork, etc.";         Types: full demo       
+Name: "epf";    Description: "Common E&P Files: Shapefiles, LAS, SGY and Raster Logs (.tif)";                 Types: full        
+Name: "pet";    Description: "IHS Petra Projects: Wells, Logs, Formations, Project stats and more.";          Types: full
+Name: "tks";    Description: "IHS Kingdom Suite Projects: Wells, Logs, Formations, Project stats and more.";  Types: full
+Name: "ggx";    Description: "LMKR GeoGraphix Discovery: Wells, Logs, Formations, Project stats and more.";   Types: full          
 
 
 [Languages]
@@ -74,28 +74,35 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 
 [Files]
-Source: "C:\dev\lc_installer\lib\node-v0.10.21-x64.msi";    DestDir: "{app}\install";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\jre-7u45-windows-x64.exe"; DestDir: "{app}\install";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\rm_java.bat";              DestDir: "{app}\install";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\set_java_home.bat";        DestDir: "{app}\install";               Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\node-v0.10.21-x64.msi";    DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\jre-7u45-windows-x64.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\rm_java.bat";              DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\set_java_home.bat";        DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\winstart-browser.bat";     DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\winstart-server.bat";      DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\nssm64.exe";               DestDir: "{app}";                Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\square_logo.ico";          DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "C:\dev\lc_installer\lib\elasticsearch-0.90.x\*";   DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\dev\HelloNode\*";                               DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\dev\lc_browser_app\*";   DestDir: "{app}\lc_browser_app2"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git", "node_modules\lc_???_crawlers"
+
+Source: "C:\dev\lc_installer\lib\proxy_DOX.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: dox
+Source: "C:\dev\lc_installer\lib\proxy_EPF.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: epf
+Source: "C:\dev\lc_installer\lib\proxy_PET.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: pet
+Source: "C:\dev\lc_installer\lib\proxy_GGX.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: ggx
+Source: "C:\dev\lc_installer\lib\proxy_TKS.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: tks
+
+
 ;Source: "C:\dev\lc_installer\lib\msie-app.hta";             DestDir: "{app}";               Flags: ignoreversion
 ;Source: "C:\dev\lc_installer\lib\msie-app-secure.hta";      DestDir: "{app}";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\winstart-browser.bat";     DestDir: "{app}\install";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\winstart-server.bat";      DestDir: "{app}\install";               Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\nssm64.exe";               DestDir: "{app}";                Flags: ignoreversion
-
-Source: "C:\dev\lc_installer\lib\square_logo.ico";          DestDir: "{app}\install";        Flags: ignoreversion
-Source: "C:\dev\HelloNode\*";                               DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\dev\lc_installer\lib\elasticsearch-0.90.x\*";   DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
-
 
 [Icons]
-Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\install\{#MyAppIcon}"
+Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\resources\{#MyAppIcon}"
 
 [Registry]
 ; set JAVA_HOME
-; totally ghetto: setting var works here, but is apparently not readable by elasticsearch later on--despite invoking as current (admin) user
-; as a workaround, I hard coded the path in elasticsearch\bin\service.bat to look for c:\program files\java\jre7
+; ghetto is: setting var works here, but is apparently not readable by elasticsearch later on--despite invoking as current (admin) user.
+; As a workaround, I hard coded the path in elasticsearch\bin\service.bat to look for c:\program files\java\jre7
 Root: HKLM64; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueName: "JAVA_HOME"; ValueType: String; ValueData: "{pf64}\java\jre7";
 
 ; set app stuff
@@ -110,10 +117,10 @@ Root: HKLM64; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environm
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent runhidden
 
 ; Install Node
-Filename: "{sys}\msiexec.exe"; Parameters: "/qb INSTALLDIR=c:\logicalcat\nodejs /i ""{app}\install\{#NODE}"""; StatusMsg: "Installing Node.js..."
+Filename: "{sys}\msiexec.exe"; Parameters: "/qb INSTALLDIR=c:\logicalcat\nodejs /i ""{app}\resources\{#NODE}"""; StatusMsg: "Installing Node.js..."
 
 ; Install Java (just keep default location)
-Filename: "{app}\install\{#JAVA}"; Parameters: " /s "; StatusMsg: "Installing JRE7..."; Check: Not JREExists();
+Filename: "{app}\resources\{#JAVA}"; Parameters: " /s "; StatusMsg: "Installing JRE7..."; Check: Not JREExists();
 
 ; Add Firewall Rules
 Filename: "{sys}\netsh.exe";   Parameters: "advfirewall firewall add rule name=""Node In""  program=""{app}\nodejs\node.exe"" dir=in  action=allow enable=yes"; Flags: runhidden; StatusMsg: "Installing Firewall Rules..."
@@ -140,7 +147,7 @@ Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "start";   Flags: s
 Filename: "{sys}\net.exe"; Parameters: "stop {#MyAppName}"; Flags: runhidden;
 Filename: "{app}\{#NSSM}"; Parameters: "remove {#MyAppName} confirm"; Flags: runhidden;
 Filename: "{sys}\net.exe"; Parameters: "stop {#MyAppName}"; Flags: runhidden;
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\bin\windows-service-installer.js remove"; Flags: runhidden;
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\bin\windows-service-installer.js remove"; Flags: runhidden;
 
 
 ; Remove Firewall Rules
@@ -153,7 +160,7 @@ Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "stop";   Flags: sh
 Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "remove"; Flags: shellexec waituntilterminated runhidden
 
 ; Uninstall Node
-Filename: "{sys}\msiexec.exe"; Parameters: "/passive /x ""{app}\{#NODE}""";
+Filename: "{sys}\msiexec.exe"; Parameters: "/passive /x ""{app}\resources\{#NODE}""";
 
 
 ; Uninstall Java (could not use msiexec x{program id} ~ weird bracket escape in this horrible editor?)
