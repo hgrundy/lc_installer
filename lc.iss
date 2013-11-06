@@ -14,6 +14,8 @@
 #define NODE "node-v0.10.21-x64.msi"
 #define USERPROFILE "C:\Users\r-b-h"
 
+#define DEVINST "c:\dev\lc_installer"
+
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -61,12 +63,12 @@ Name: "custom"; Description: "Custom: Select Individual Crawlers";              
 
 
 [Components]
-Name: "base";   Description: "LogicalCat Browser Application: The main interface for search and reporting. "; Types: full demo custom; Flags: fixed
-Name: "dox";    Description: "Common Business Documents: MS Office, Adobe PDF, txt/csv, iWork, etc.";         Types: full demo       
-Name: "epf";    Description: "Common E&P Files: Shapefiles, LAS, SGY and Raster Logs (.tif)";                 Types: full        
-Name: "pet";    Description: "IHS Petra Projects: Wells, Logs, Formations, Project stats and more.";          Types: full
-Name: "tks";    Description: "IHS Kingdom Suite Projects: Wells, Logs, Formations, Project stats and more.";  Types: full
-Name: "ggx";    Description: "LMKR GeoGraphix Discovery: Wells, Logs, Formations, Project stats and more.";   Types: full          
+Name: "base";   Description: "LogicalCat Browser Application: For search and reporting. "; Types: full demo custom; Flags: fixed
+Name: "dox";    Description: "Common Business Documents: MS Office, PDF, txt/csv, etc.";         Types: full demo       
+Name: "epf";    Description: "Common E&P Files: SHP, LAS, SGY and Raster Logs (.tif)";                 Types: full        
+Name: "pet";    Description: "IHS Petra: Wells, Logs, Tops, Project stats, etc.";          Types: full
+Name: "tks";    Description: "IHS Kingdom Suite:  Wells, Logs, Tops, Project stats, etc.";  Types: full
+Name: "ggx";    Description: "LMKR GeoGraphix Discovery:  Wells, Logs, Tops, Project stats, etc.";   Types: full          
 
 
 [Languages]
@@ -74,24 +76,23 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 
 [Files]
-Source: "C:\dev\lc_installer\lib\node-v0.10.21-x64.msi";    DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\jre-7u45-windows-x64.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\rm_java.bat";              DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\set_java_home.bat";        DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\winstart-browser.bat";     DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\winstart-server.bat";      DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\nssm64.exe";               DestDir: "{app}";                Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\square_logo.ico";          DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "C:\dev\lc_installer\lib\elasticsearch-0.90.x\*";   DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\dev\HelloNode\*";                               DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\dev\lc_browser_app\*";   DestDir: "{app}\lc_browser_app2"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git", "node_modules\lc_???_crawlers"
+Source: "{#DEVINST}\lib\node-v0.10.21-x64.msi";    DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\jre-7u45-windows-x64.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\rm_java.bat";              DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\set_java_home.bat";        DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\winstart-browser.bat";     DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\winstart-server.bat";      DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\nssm64.exe";               DestDir: "{app}";                Flags: ignoreversion
+Source: "{#DEVINST}\lib\square_logo.ico";          DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\elasticsearch-0.90.x\*";   DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "C:\dev\HelloNode\*";                  DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\dev\lc_browser_app\*";   DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git,node_modules\lc_???_crawlers"
 
-Source: "C:\dev\lc_installer\lib\proxy_DOX.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: dox
-Source: "C:\dev\lc_installer\lib\proxy_EPF.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: epf
-Source: "C:\dev\lc_installer\lib\proxy_PET.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: pet
-Source: "C:\dev\lc_installer\lib\proxy_GGX.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: ggx
-Source: "C:\dev\lc_installer\lib\proxy_TKS.txt"; DestDir: "{app}";  Flags: ignoreversion; Components: tks
-
+Source: "c:\dev\lc_browser_app\node_modules\lc_dox_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_dox_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: dox
+Source: "c:\dev\lc_browser_app\node_modules\lc_epf_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_epf_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: epf
+Source: "c:\dev\lc_browser_app\node_modules\lc_pet_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_pet_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: pet
+Source: "c:\dev\lc_browser_app\node_modules\lc_ggx_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: ggx
+;Source: "{#DEV}\lc_browser_app\node_modules\lc_tks_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_dox_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: tks
 
 ;Source: "C:\dev\lc_installer\lib\msie-app.hta";             DestDir: "{app}";               Flags: ignoreversion
 ;Source: "C:\dev\lc_installer\lib\msie-app-secure.hta";      DestDir: "{app}";               Flags: ignoreversion
@@ -119,24 +120,30 @@ Root: HKLM64; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environm
 ; Install Node
 Filename: "{sys}\msiexec.exe"; Parameters: "/qb INSTALLDIR=c:\logicalcat\nodejs /i ""{app}\resources\{#NODE}"""; StatusMsg: "Installing Node.js..."
 
-; Install Java (just keep default location)
-Filename: "{app}\resources\{#JAVA}"; Parameters: " /s "; StatusMsg: "Installing JRE7..."; Check: Not JREExists();
+; Install Java (use default location)
+Filename: "{app}\resources\{#JAVA}"; Parameters: " /s "; StatusMsg: "Installing JRE7..."; Check: Not JREExists()
 
 ; Add Firewall Rules
 Filename: "{sys}\netsh.exe";   Parameters: "advfirewall firewall add rule name=""Node In""  program=""{app}\nodejs\node.exe"" dir=in  action=allow enable=yes"; Flags: runhidden; StatusMsg: "Installing Firewall Rules..."
 Filename: "{sys}\netsh.exe";   Parameters: "advfirewall firewall add rule name=""Node Out"" program=""{app}\nodejs\node.exe"" dir=out action=allow enable=yes"; Flags: runhidden; StatusMsg: "Installing Firewall Rules..."
 
-; Add System Service
-Filename: "{app}\{#NSSM}";     Parameters: "install {#MyAppName} ""{app}\nodejs\node.exe"" ""{app}\lc_browser_app\bin\server.js"" ""5566"""; Flags: runhidden; StatusMsg: "Installing LogicalCat Service..."
+; Add LogicalCat as Service
+;Filename: "{app}\{#NSSM}";     Parameters: "install {#MyAppName} ""{app}\nodejs\node.exe"" ""{app}\lc_browser_app\bin\server.js"" ""5566"""; Flags: runhidden; StatusMsg: "Installing LogicalCat Service..."
+Filename: "{app}\{#NSSM}";     Parameters: "install {#MyAppName} ""{app}\nodejs\node.exe"" ""{app}\lc_browser_app\app.js"" ""8008"""; Flags: runhidden; StatusMsg: "Installing LogicalCat Service..."
 Filename: "{sys}\net.exe";     Parameters: "start {#MyAppName}"; Flags: runhidden; StatusMsg: "Starting LogicalCat Service..."
 
-; Configure ElasticSearch service
+; Configure ElasticSearch service (and set start type to auto)
 Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "install"; Flags: shellexec waituntilterminated runhidden; StatusMsg: "Installing ElasticSearch Service..."
 Filename: "{app}\elasticsearch\bin\service.bat"; Parameters: "start";   Flags: shellexec waituntilterminated runhidden; StatusMsg: "Starting ElasticSearch Service..."
+Filename: "{sys}\sc.exe"; Parameters: "config elasticsearch-service-x64 start= auto"; Flags: shellexec postinstall runhidden
 
-
-
-
+; Initialize app and crawler indexes
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\cli init"; Flags: shellexec waituntilterminated runhidden; 
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node-modules\lc_dox_crawlers\cli init"; Flags: shellexec waituntilterminated runhidden; Components: dox
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node-modules\lc_epf_crawlers\cli init"; Flags: shellexec waituntilterminated runhidden; Components: epf
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node-modules\lc_ggx_crawlers\cli init"; Flags: shellexec waituntilterminated runhidden; Components: ggx
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node-modules\lc_pet_crawlers\cli init"; Flags: shellexec waituntilterminated runhidden; Components: pet
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node-modules\lc_tks_crawlers\cli init"; Flags: shellexec waituntilterminated runhidden; Components: tks
 
 
 
