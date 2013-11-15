@@ -14,8 +14,8 @@
 #define GM "GraphicsMagick-1.3.18-Q16-win64-dll.exe"
 #define USERPROFILE "C:\Users\r-b-h"
 
-#define PET3DLL "pet3odbc.dll"
-#define PET4DLL "pet4odbc.dll"  
+#define PET3REGKEY "SOFTWARE\Wow6432Node\ODBC\ODBCINST.INI\lc_petra_3_odbc"
+#define PET4REGKEY "SOFTWARE\Wow6432Node\ODBC\ODBCINST.INI\lc_petra_4_odbc"  
 
 #define DEVINST "c:\dev\lc_installer"
 
@@ -27,7 +27,6 @@
 AppId={{2752ABBC-503D-4F3E-AC37-95EF35E343E3}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -37,7 +36,7 @@ DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=C:\dev\lc_installer\out
-OutputBaseFilename=setup
+OutputBaseFilename=lc_setup_3_0_0
 SetupIconFile="C:\dev\lc_installer\lib\square_logo.ico"
 ;Password=kitty
 Compression=lzma
@@ -85,8 +84,9 @@ Source: "{#DEVINST}\lib\winstart-server.bat";                     DestDir: "{app
 Source: "{#DEVINST}\lib\nssm64.exe";                              DestDir: "{app}";                Flags: ignoreversion
 Source: "{#DEVINST}\lib\GraphicsMagick-1.3.18-Q16-win64-dll.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\square_logo.ico";                         DestDir: "{app}\resources";      Flags: ignoreversion
-;Source: "{#DEVINST}\lib\pet3odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
-;Source: "{#DEVINST}\lib\pet4odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
+Source: "{#DEVINST}\lib\LogicalCat_SLA.pdf";                      DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\pet3odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
+Source: "{#DEVINST}\lib\pet4odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
 Source: "{#DEVINST}\lib\elasticsearch-0.90.x\*";                  DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\dev\lc_browser_app\*"; DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git,node_modules\lc_???_crawlers"
 
@@ -106,7 +106,31 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFi
 ; As a workaround, I hard coded the path in elasticsearch\bin\service.bat to look for c:\program files\java\jre7
 Root: HKLM64; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueName: "JAVA_HOME"; ValueType: String; ValueData: "{pf64}\java\jre7";
 
-Root: HKLM64; Subkey: "SOFTWARE\Wow6432Node\ODBC\ODBCINST.INI\lc_petra_3_odbc"
+; Petra v3 DBISAM driver
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; Flags: uninsdeletekeyifempty;  Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "APILevel";         ValueType: string; ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "ConnectFunctions"; ValueType: string; ValueData: "YYY";                          Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "Driver";           ValueType: string; ValueData: "{app}\resources\pet3odbc.dll"; Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "DriverODBCVer";    ValueType: string; ValueData: "3.00";                         Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "FileExtns";        ValueType: string; ValueData: "*.dat,*.idx,*.blb";            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "FileUsage";        ValueType: string; ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "Setup";            ValueType: string; ValueData: "{app}\resources\pet3odbc.dll"; Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "SQLLevel";         ValueType: string; ValueData: "0";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET3REGKEY}"; ValueName: "UsageCount";       ValueType: dword;  ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+
+; Petra v4 ElevateDB driver
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; Flags: uninsdeletekeyifempty;  Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "APILevel";         ValueType: string; ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "ConnectFunctions"; ValueType: string; ValueData: "YYY";                          Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "Driver";           ValueType: string; ValueData: "{app}\resources\pet4odbc.dll"; Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "DriverODBCVer";    ValueType: string; ValueData: "3.00";                         Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "FileExtns";        ValueType: string; ValueData: "*.EDBTbl,*.EDBIdx,*.EDBBlb";   Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "FileUsage";        ValueType: string; ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "Setup";            ValueType: string; ValueData: "{app}\resources\pet4odbc.dll"; Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "SQLLevel";         ValueType: string; ValueData: "0";                            Flags:  uninsdeletekey; Components: pet
+Root: HKLM64; Subkey: "{#PET4REGKEY}"; ValueName: "UsageCount";       ValueType: dword;  ValueData: "1";                            Flags:  uninsdeletekey; Components: pet
+
+
 
 [Run]
 
