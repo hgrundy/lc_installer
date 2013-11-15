@@ -14,6 +14,9 @@
 #define GM "GraphicsMagick-1.3.18-Q16-win64-dll.exe"
 #define USERPROFILE "C:\Users\r-b-h"
 
+#define PET3DLL "pet3odbc.dll"
+#define PET4DLL "pet4odbc.dll"  
+
 #define DEVINST "c:\dev\lc_installer"
 
 
@@ -82,6 +85,8 @@ Source: "{#DEVINST}\lib\winstart-server.bat";                     DestDir: "{app
 Source: "{#DEVINST}\lib\nssm64.exe";                              DestDir: "{app}";                Flags: ignoreversion
 Source: "{#DEVINST}\lib\GraphicsMagick-1.3.18-Q16-win64-dll.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\square_logo.ico";                         DestDir: "{app}\resources";      Flags: ignoreversion
+;Source: "{#DEVINST}\lib\pet3odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
+;Source: "{#DEVINST}\lib\pet4odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
 Source: "{#DEVINST}\lib\elasticsearch-0.90.x\*";                  DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\dev\lc_browser_app\*"; DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git,node_modules\lc_???_crawlers"
 
@@ -101,6 +106,7 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFi
 ; As a workaround, I hard coded the path in elasticsearch\bin\service.bat to look for c:\program files\java\jre7
 Root: HKLM64; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueName: "JAVA_HOME"; ValueType: String; ValueData: "{pf64}\java\jre7";
 
+Root: HKLM64; Subkey: "SOFTWARE\Wow6432Node\ODBC\ODBCINST.INI\lc_petra_3_odbc"
 
 [Run]
 
