@@ -183,7 +183,7 @@ Filename: "{app}\resources\{#GM}"; Parameters: " /VERYSILENT /NOICONS /DIR=""{ap
 Filename: {sys}\services.msc; WorkingDir: {sys}; Flags: shellexec postinstall; Description: Open Services Control Panel to edit Log On account
 
 ; Launch default browser to app page
-Filename: "http://localhost:8008"; Flags: shellexec runasoriginaluser
+Filename: "http://localhost:8008"; Flags: shellexec postinstall runasoriginaluser; Description: Launch Browser to http://localhost:8008
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
