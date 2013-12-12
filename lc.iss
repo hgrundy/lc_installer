@@ -176,7 +176,7 @@ Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_module
 ;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_tks_crawlers\cli init"; Flags: waituntilterminated runhidden; Components: tks; StatusMsg: "Creating tks index..."
 ;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_tks_crawlers\cli init"; Flags: waituntilterminated runhidden; Components: tks;
 
-Filename: "{app}\resources\{#GM}"; Parameters: " /VERYSILENT /NOICONS /DIR=""{app}\graphics_magick"" ";           Flags: waituntilterminated runhidden; Components: epf; StatusMsg: "Installing GraphicsMagick..."
+Filename: "{app}\resources\{#GM}"; Parameters: " /VERYSILENT /NOICONS /DIR=""{app}\graphics_magick"" ";          Flags: waituntilterminated runhidden; Components: epf; StatusMsg: "Installing GraphicsMagick..."; AfterInstall: KillTheFrog
 
 ; Ask user to modify LogicalCat Service
 Filename: {sys}\services.msc; WorkingDir: {sys}; Flags: shellexec postinstall; Description: Open Services Control Panel to edit Log On account
@@ -184,10 +184,9 @@ Filename: {sys}\services.msc; WorkingDir: {sys}; Flags: shellexec postinstall; D
 ; Launch default browser to app page
 Filename: "http://localhost:8008"; Flags: shellexec postinstall runasoriginaluser; Description: Launch Browser to http://localhost:8008
 
-; Get rid of the hideous frog icon since /NOICONS doesn't seem to work for GraphicsMagick installation
-[InstallDelete]
-Type: files; Name: "{userdesktop}\GraphicsMagick Display (64-bit).lnk"
-Type: files; Name: "{commondesktop}\GraphicsMagick Display (64-bit).lnk"
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -225,3 +224,10 @@ Filename: "{sys}\msiexec.exe"; Parameters: "/passive /x ""{app}\resources\{#NODE
 Filename: "{sys}\rmdir"; Parameters: "-r ""{app}""";
 
 
+; remove horrible GraphicsMagick icon from desktop
+[Code] 
+procedure KillTheFrog();
+begin
+  DeleteFile(ExpandConstant('{userdesktop}\GraphicsMagick Display (64-bit).lnk'));
+  DeleteFile(ExpandConstant('{commondesktop}\GraphicsMagick Display (64-bit).lnk'));
+end;
