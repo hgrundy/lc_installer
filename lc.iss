@@ -9,9 +9,9 @@
 #define MyAppIcon "square_logo.ico"
 
 #define NSSM "nssm64.exe"
-#define JAVA "jre-7u45-windows-x64.exe"
-#define NODE "node-v0.10.22-x64.msi"
-#define GM "GraphicsMagick-1.3.18-Q16-win64-dll.exe"
+#define JAVA "jre-7u51-windows-x64.exe"
+#define NODE "node-v0.10.26-x64.msi"
+#define GM "GraphicsMagick-1.3.19-Q8-win64-dll.exe"
 #define USERPROFILE "C:\Users\r-b-h"
 
 #define PET3REGKEY "SOFTWARE\Wow6432Node\ODBC\ODBCINST.INI\lc_petra_3_odbc"
@@ -66,6 +66,7 @@ Name: "base";   Description: "LogicalCat Browser Application: For search and rep
 Name: "dox";    Description: "Common Business Documents: MS Office, PDF, txt/csv, etc.";           Types: full demo       
 Name: "epf";    Description: "Common E&P Files: SHP, LAS, SGY and Raster Logs (.tif)";             Types: full        
 Name: "pet";    Description: "IHS Petra: Wells, Logs, Tops, Project stats, etc.";                  Types: full
+Name: "pdm";    Description: "PPDM: Wells, Logs, Tops, Directional Surveys, etc.";                 Types: full
 Name: "tks";    Description: "IHS Kingdom Suite:  Wells, Logs, Tops, Project stats, etc.";         Types: full
 Name: "ggx";    Description: "LMKR GeoGraphix Discovery:  Wells, Logs, Tops, Project stats, etc."; Types: full          
 
@@ -75,24 +76,25 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 
 [Files]
-Source: "{#DEVINST}\lib\node-v0.10.22-x64.msi";                   DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "{#DEVINST}\lib\jre-7u45-windows-x64.exe";                DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\node-v0.10.26-x64.msi";                   DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\jre-7u51-windows-x64.exe";                DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\rm_java.bat";                             DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\set_java_home.bat";                       DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\launch_browser.bat";                      DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\nssm64.exe";                              DestDir: "{app}\resources";      Flags: ignoreversion
-Source: "{#DEVINST}\lib\GraphicsMagick-1.3.18-Q16-win64-dll.exe"; DestDir: "{app}\resources";      Flags: ignoreversion
+Source: "{#DEVINST}\lib\GraphicsMagick-1.3.19-Q8-win64-dll.exe";  DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\square_logo.ico";                         DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\LogicalCat_SLA.pdf";                      DestDir: "{app}\resources";      Flags: ignoreversion
 Source: "{#DEVINST}\lib\pet3odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
 Source: "{#DEVINST}\lib\pet4odbc.dll";                            DestDir: "{app}\resources";      Flags: ignoreversion; Components: pet
-Source: "{#DEVINST}\lib\elasticsearch-0.90.7\*";                  DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#DEVINST}\lib\elasticsearch-1.0.0\*";                   DestDir: "{app}\elasticsearch";  Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\dev\lc_browser_app\*"; DestDir: "{app}\lc_browser_app"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: ".git,node_modules\lc_???_crawlers"
 
 Source: "c:\dev\lc_browser_app\node_modules\lc_dox_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_dox_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: dox
 Source: "c:\dev\lc_browser_app\node_modules\lc_epf_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_epf_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: epf
 Source: "c:\dev\lc_browser_app\node_modules\lc_pet_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_pet_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: pet
-Source: "c:\dev\lc_browser_app\node_modules\lc_ggx_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: ggx
+Source: "c:\dev\lc_browser_app\node_modules\lc_pdm_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_pdm_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: pdm
+;Source: "c:\dev\lc_browser_app\node_modules\lc_ggx_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: ggx
 ;Source: "{#DEV}\lc_browser_app\node_modules\lc_tks_crawlers\*"; DestDir: "{app}\lc_browser_app\node_modules\lc_tks_crawlers";  Flags: ignoreversion recursesubdirs createallsubdirs; Components: tks
 
 
@@ -164,15 +166,16 @@ Filename: "{sys}\ping.exe"; Parameters: "-n 10 localhost"; Flags: waituntiltermi
 [Run]
 ; Initialize app and crawler indexes
 Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\cli init";                                  Flags: waituntilterminated runhidden;                  StatusMsg: "Creating loc index..."
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\cli init_app";                              Flags: waituntilterminated runhidden;
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\cli init_app";                              Flags: waituntilterminated runhidden;
 Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_dox_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: dox; StatusMsg: "Creating dox index..."
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_dox_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: dox;
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_dox_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: dox;
 Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_epf_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: epf; StatusMsg: "Creating epf index..."
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_epf_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: epf;
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: ggx; StatusMsg: "Creating ggx index..."
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: ggx;
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_epf_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: epf;
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: ggx; StatusMsg: "Creating ggx index..."
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_ggx_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: ggx;
 Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_pet_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: pet; StatusMsg: "Creating pet index..."
-Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_pet_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: pet;
+Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_pdm_crawlers\cli init";     Flags: waituntilterminated runhidden; Components: pdm; StatusMsg: "Creating pdm index..."
+;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_pet_crawlers\cli init_app"; Flags: waituntilterminated runhidden; Components: pet;
 ;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_tks_crawlers\cli init"; Flags: waituntilterminated runhidden; Components: tks; StatusMsg: "Creating tks index..."
 ;Filename: "{app}\nodejs\node.exe"; Parameters: "{app}\lc_browser_app\node_modules\lc_tks_crawlers\cli init"; Flags: waituntilterminated runhidden; Components: tks;
 
