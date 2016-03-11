@@ -2,4 +2,7 @@ lc_installer
 ============
 
 Windows installer for LogicalCat using Inno Setup.
-(this is an ancient, ancient thing.)
+
+Yep, it installs a Node app (Express) and Elasticsearch. On Windows. And it actually works.
+
+The project is defunct, but here's the installer.
