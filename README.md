@@ -1,4 +1,5 @@
 lc_installer
 ============
 
-Windows installer using Inno Setup.
+Windows installer for LogicalCat using Inno Setup.
+(this is an ancient, ancient thing.)
